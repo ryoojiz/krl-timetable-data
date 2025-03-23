@@ -1,4 +1,5 @@
 name: KRL Timetable Scraper
+runs-on: self-hosted
 
 on:
   schedule:
