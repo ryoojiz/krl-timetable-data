@@ -2,8 +2,8 @@ name: KRL Timetable Scraper
 
 on:
   schedule:
-    - cron: '*/10 * * * *'  # Run every 10 minutes
-  workflow_dispatch:  # Allow manual trigger
+    - cron: '*10 * * * *' 
+  workflow_dispatch:  
 
 jobs:
   scrape:
@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        fetch-depth: 0  # Fetch all history for git operations
+        fetch-depth: 0
     
     - name: Set up Python
       uses: actions/setup-python@v4
