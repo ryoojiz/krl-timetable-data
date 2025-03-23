@@ -54,6 +54,6 @@ jobs:
     
     - name: Commit and push changes
       run: |
-        git add archive/*.zip previous_GTFS.zip || true
+        git add .
         git commit -m "Update GTFS data" || true
         git push
