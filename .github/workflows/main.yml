@@ -1,0 +1,56 @@
+name: Test API Connection
+
+on:
+  workflow_dispatch:  # Allows manual trigger
+  push:  # Runs on every push
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Run API Test
+        run: |
+          import requests
+
+          # API Endpoints
+          APIS = {
+              "STATION_API": "https://api-partner.krl.co.id/krl-webs/v1/krl-station",
+              "SCHEDULE_API": "https://api-partner.krl.co.id/krl-webs/v1/schedule",
+              "TRAIN_SCHEDULE_API": "https://api-partner.krl.co.id/krl-webs/v1/schedule-train"
+          }
+
+          # Authorization Token (Replace with a valid token)
+          AUTH_TOKEN = "Bearer ${{ secrets.AUTH_TOKEN }}"
+
+          HEADERS = {
+              "User-Agent": "Mozilla/5.0",
+              "Accept": "application/json",
+              "Authorization": AUTH_TOKEN
+          }
+
+          def test_api(endpoint_name, url):
+              print(f"🔄 Testing {endpoint_name}...")
+              try:
+                  response = requests.get(url, headers=HEADERS, timeout=15)
+                  if response.status_code == 200:
+                      print(f"✅ {endpoint_name}: SUCCESS (Status {response.status_code})")
+                  else:
+                      print(f"⚠️ {endpoint_name}: ERROR (Status {response.status_code})")
+              except requests.RequestException as e:
+                  print(f"❌ {endpoint_name}: FAILED → {e}")
+
+          if __name__ == "__main__":
+              for name, url in APIS.items():
+                  test_api(name, url)
+        shell: python
