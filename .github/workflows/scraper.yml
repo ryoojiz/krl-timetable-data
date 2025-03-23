@@ -1,5 +1,4 @@
 name: KRL Timetable Scraper
-runs-on: self-hosted
 
 on:
   schedule:
@@ -8,7 +7,7 @@ on:
 
 jobs:
   scrape:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     
     steps:
     - uses: actions/checkout@v3
