@@ -35,7 +35,7 @@ ROUTES = {
 
 # Fetch all stations
 def fetch_stations():
-    response = requests.get(STATION_API, headers=HEADERS)
+    response = requests.get(STATION_API, headers=HEADERS, timeout=30)
     if response.status_code == 200:
         return response.json().get("data", [])
     else:
@@ -46,7 +46,7 @@ def fetch_stations():
 def fetch_schedule(station_id):
     print(f"Fetching schedule for {station_id}")       
     params = {"stationid": station_id, "timefrom": "00:00", "timeto": "23:59"}
-    response = requests.get(SCHEDULE_API, headers=HEADERS, params=params)
+    response = requests.get(SCHEDULE_API, headers=HEADERS, params=params, timeout=30)
     if response.status_code == 200:
         print(f"Fetched schedule for {station_id}")        
         return station_id, response.json().get("data", [])
@@ -61,7 +61,7 @@ TRAIN_SCHEDULE_API = "https://api-partner.krl.co.id/krl-webs/v1/schedule-train"
 def fetch_train_schedule(train_id):
         print(f"Fetching train schedule for {train_id}")
         params = {"trainid": train_id}
-        response = requests.get(TRAIN_SCHEDULE_API, headers=HEADERS, params=params)
+        response = requests.get(TRAIN_SCHEDULE_API, headers=HEADERS, params=params, timeout=30)
         if response.status_code == 200:
             return response.json().get("data", [])
         else:
