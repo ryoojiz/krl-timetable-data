@@ -17,10 +17,14 @@ jobs:
           sudo apt install -y tor python3-pip
           pip install requests[socks] stem
 
-      - name: Start Tor Service
+      - name: Start Tor Service on Port 9051
         run: |
-          tor &  # Start Tor in the background
-          sleep 10  # Give Tor time to start
+          if ! pgrep -x "tor" > /dev/null; then
+            tor --SocksPort 9051 &  # Start Tor with custom SOCKS port
+            sleep 10  # Give Tor time to start
+          else
+            echo "⚠️ Tor is already running."
+          fi
 
       - name: Run API Test via Tor
         run: |
@@ -43,8 +47,8 @@ jobs:
           }
 
           PROXIES = {
-              "http": "socks5h://127.0.0.1:9050",
-              "https": "socks5h://127.0.0.1:9050"
+              "http": "socks5h://127.0.0.1:9051",
+              "https": "socks5h://127.0.0.1:9051"
           }
 
           def test_api(endpoint_name, url):
